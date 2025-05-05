@@ -1,0 +1,26 @@
+{
+  "name": "utilis",
+  "version": "1.0.0",
+  "description": "discord bot",
+  "main": "./src/index.ts",
+  "scripts":{
+    "test": "ts-node ./src/index.ts",
+    "start": "node ./build/index.js",
+    "compile": "tsc -p ."
+  },
+  "keywords": [
+    "discordjs",
+    "typescript",
+    "utilis"
+  ],
+  "author": "tanahiro2010",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "discord.js": "^14.19.3",
+    "dotenv": "^16.5.0"
+  }
+}

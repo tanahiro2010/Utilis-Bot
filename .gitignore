@@ -1,0 +1,10 @@
+# env
+.env.local
+.env
+
+# build output
+dist
+build
+out
+
+node_modules
