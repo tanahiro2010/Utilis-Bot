@@ -4,6 +4,7 @@ interface Command {
   data: {
     name: string;
     description: string;
+    flags: number;
     options?: Array<{
       name: string;
       description: string;
