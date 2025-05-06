@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder, ButtonStyle, Role, ActionRowBuilder, ButtonBuilder } from "discord.js";
+import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder, ButtonStyle, Role, ActionRowBuilder, ButtonBuilder, Colors } from "discord.js";
 import { createButton } from "../models/button";
 import { Command } from "../interface/command";
 
@@ -34,7 +34,7 @@ module.exports = {
         const role: Role = interaction.options.get("role")?.role as Role;
 
         const embed = new EmbedBuilder()
-            .setColor("#0000ff")
+            .setColor(Colors.Blue)
             .setTitle(title)
             .setDescription(description);
 
