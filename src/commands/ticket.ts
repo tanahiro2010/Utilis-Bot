@@ -6,9 +6,7 @@ import {
     ActionRowBuilder, 
     ButtonBuilder, 
     Colors, 
-    MessageFlags, 
     ChannelType,
-    CategoryChannel,
     Role
 } from "discord.js";
 import { createButton } from "../models/button";
@@ -114,7 +112,7 @@ module.exports = {
             buttonText,
             JSON.stringify({
                 data: {
-                    action: "ticket",
+                    action: "create-ticket",
                     flags: 0
                 },
                 value: {
