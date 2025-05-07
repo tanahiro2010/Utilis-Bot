@@ -50,6 +50,8 @@ module.exports = {
             return;
         }
 
+        await interaction.followUp({});
+
         const embed = new EmbedBuilder()
             .setColor(Colors.Aqua)
             .setTitle("Close the ticket")
@@ -79,7 +81,7 @@ module.exports = {
             .addComponents(openButton)
             .addComponents(deleteButton);
 
-        await interaction.followUp({ embeds: [embed], components: [raw] });
+        await channel.send({ embeds: [embed], components: [raw] });
 
         return;
     }
