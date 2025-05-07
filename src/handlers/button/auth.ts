@@ -1,9 +1,11 @@
 import { ButtonInteraction, EmbedBuilder, GuildMember, Colors, MessageFlags } from "discord.js";
-import { Action } from "../interface/action";
+import { Action } from "../../interface/action";
+import { ButtonCommand } from "../../interface/command";
 
 module.exports = {
     data: {
-        actionName: "auth"
+        actionName: "auth",
+        flags: MessageFlags.Ephemeral
     },
 
     async execute(interaction: ButtonInteraction): Promise<void> {
@@ -12,7 +14,7 @@ module.exports = {
         const { customId } = interaction;
         console.log(`Custom ID: ${customId}`);
 
-        const command = JSON.parse(customId);
+        const command: ButtonCommand = JSON.parse(customId);
         const roleId = command.value.roleId;
 
         console.log(`Guild Name: ${interaction.guild?.name}`);

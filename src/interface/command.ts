@@ -31,4 +31,15 @@ interface Command {
   execute: (interaction: CommandInteraction) => Promise<void>;
 }
 
-export type { Command };
+interface ButtonCommand {
+  data: {
+    action: string;
+    flags: number;
+  };
+
+  value: {
+    [key: string]: any;
+  };
+}
+
+export type { Command, ButtonCommand };

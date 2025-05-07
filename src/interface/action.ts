@@ -1,6 +1,6 @@
-import { ButtonInteraction } from "discord.js";
+import { ButtonInteraction, ModalSubmitInteraction } from "discord.js";
 
-interface Action<ActionType = ButtonInteraction | any> {
+interface Action<ActionType = ButtonInteraction | ModalSubmitInteraction | any> {
     data: {
         actionName: string;
     };

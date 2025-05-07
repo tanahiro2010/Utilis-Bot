@@ -1,10 +1,12 @@
 import { ButtonInteraction, ButtonBuilder, ActionRowBuilder, TextChannel, EmbedBuilder, Colors, ButtonStyle } from "discord.js";
-import { Action } from "../interface/action";
-import { createButton } from "../models/button";
+import { ButtonCommand } from "../../interface/command";
+import { createButton } from "../../models/button";
+import { Action } from "../../interface/action";
 
 module.exports = {
     data: {
-        actionName: "close-ticket"
+        actionName: "close-ticket",
+        flags: 0
     },
 
     async execute(interaction: ButtonInteraction): Promise<void> {
@@ -23,7 +25,7 @@ module.exports = {
             return;
         }
 
-        const command = JSON.parse(customId);
+        const command: ButtonCommand = JSON.parse(customId);
         console.log(command);
         const { userId } = command.value;
 
@@ -62,7 +64,7 @@ module.exports = {
             value: {
                 userId: userId,
             }
-        }), ButtonStyle.Premium);
+        }));
 
         const deleteButton = createButton("Delete ticket", JSON.stringify({
             data: {

@@ -1,17 +1,19 @@
-import { ButtonInteraction, EmbedBuilder, GuildMember, Colors, ButtonStyle, ActionRowBuilder, TextChannel, ButtonBuilder } from "discord.js";
-import { createButton } from "../models/button";
-import { Action } from "../interface/action";
+import { ButtonInteraction, EmbedBuilder, GuildMember, Colors, ButtonStyle, ActionRowBuilder, TextChannel, ButtonBuilder, MessageFlags } from "discord.js";
+import { ButtonCommand } from "../../interface/command";
+import { createButton } from "../../models/button";
+import { Action } from "../../interface/action";
 
 
 module.exports = {
     data: {
         actionName: "create-ticket",
+        flags: MessageFlags.Ephemeral
     },
 
     async execute(interaction: ButtonInteraction): Promise<void> {
         const { customId, member } = interaction;
         const guildMember = member as GuildMember;
-        const command = JSON.parse(customId);
+        const command: ButtonCommand = JSON.parse(customId);
         const { categoryId } = command.value;
 
         const category = interaction.guild?.channels.cache.get(categoryId);

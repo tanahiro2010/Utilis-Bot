@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, Interaction, CacheType, ButtonInteraction, MessageFlags, MessageFlagsBitField } from "discord.js";
+import { Client, GatewayIntentBits, Interaction, CacheType, ButtonInteraction, MessageFlags, MessageFlagsBitField, ModalSubmitInteraction } from "discord.js";
 import { Action } from "./interface/action";
 import { Command } from "./interface/command";
 import dotenv from "dotenv";
@@ -12,6 +12,22 @@ const client = new Client({
     intents: Object.values(GatewayIntentBits) as GatewayIntentBits[],
 });
 
+// self interface
+interface Actions {
+    button: {
+        [key: string]: Action<ButtonInteraction>;
+    };
+
+    modal: { 
+        [key: string]: Action<ModalSubmitInteraction>; 
+    };
+
+    [key: string]: {
+        [key: string]: Action<any>
+    }
+}
+
+
 // Registering commands
 const commands: { [key: string]: Command } = {};
 const commandFiles = fs.readdirSync("./src/commands").filter((file) => file.endsWith(fileType));
@@ -20,12 +36,19 @@ for (const file of commandFiles) {
     commands[command.data.name] = command;
 }
 
-const actions: { button: { [key: string]: Action<ButtonInteraction> } } = { button: {} };
-const actionFiles = fs.readdirSync("./src/actions").filter((file) => file.endsWith(fileType));
-for (const file of actionFiles) {
-    const action = require(`./actions/${file}`) as Action<ButtonInteraction>;
-    actions.button[action.data.actionName] = action;
+const actions: Actions = { button: {}, modal: {} };
+const folders = fs.readdirSync("./src/handlers");
+
+for (const folder of folders) {
+    const actionFiles = fs.readdirSync(`./src/handlers/${folder}`).filter((file) => file.endsWith(fileType));
+    
+    for (const file of actionFiles) {
+        const path = `./handlers/${folder}/${file}`;
+        const action = require(path) as Action<any>;
+        actions[folder][action.data.actionName] = action;
+    }
 }
+
 
 client.once("ready", async () => {
     console.log(`Logged in as ${client.user?.tag}`);
