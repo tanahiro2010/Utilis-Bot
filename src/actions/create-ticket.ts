@@ -53,8 +53,8 @@ module.exports = {
                     action: "close-ticket", 
                     flags: 0 
                 }, 
-                value: { 
-                    channel: channel.id 
+                value: {
+                    userId: guildMember.id
                 } 
             }), ButtonStyle.Danger);
             
