@@ -38,6 +38,7 @@ for (const file of commandFiles) {
     commands[command.data.name] = command;
 }
 console.log("End load command");
+console.log("");
 
 console.log("Fetching handlers...");
 const actions: Actions = { button: {}, modal: {} };
@@ -50,10 +51,15 @@ for (const folder of folders) {
         const path = `./handlers/${folder}/${file}`;
         const action = require(path) as Action<any>;
         console.log(`Load: ${action.data.actionName}`);
-        
+
         actions[folder][action.data.actionName] = action;
     }
+
+    console.log(`End load ${folder} handlers`);
+    console.log("")
 }
+console.log("End load handlers");
+console.log("");
 
 
 client.once("ready", async () => {
@@ -70,6 +76,8 @@ client.once("ready", async () => {
     await client.application?.commands.set(data as any);
 
     console.log("Commands registered successfully!");
+    console.log("");
+
     return client.user?.setActivity("with Discord.js", { type: 0 });
 });
 
@@ -90,6 +98,7 @@ client.on("interactionCreate", async (interaction: Interaction<CacheType>) => { 
     }
 
     console.log(`Executing command: ${commandName}`);
+    console.log("");
 
     try {
         await command.execute(interaction);
@@ -122,6 +131,7 @@ client.on("interactionCreate", async (interaction: Interaction<CacheType>) => { 
     }
 
     console.log(`Executing action: ${actionName}`);
+    console.log("");
     await action.execute(interaction);
 });
 
