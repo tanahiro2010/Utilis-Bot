@@ -34,7 +34,7 @@ const commands: { [key: string]: Command } = {};
 const commandFiles = fs.readdirSync("./src/commands").filter((file) => file.endsWith(fileType));
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`) as Command;
-    console.log(`Load: ${command.data.name}`);
+    console.log(`  Load: ${command.data.name}`);
     commands[command.data.name] = command;
 }
 console.log("End load command");
@@ -45,17 +45,17 @@ const actions: Actions = { button: {}, modal: {} };
 const folders = fs.readdirSync("./src/handlers");
 for (const folder of folders) {
     const actionFiles = fs.readdirSync(`./src/handlers/${folder}`).filter((file) => file.endsWith(fileType));
-    console.log(`Handler Type: ${folder}`);
+    console.log(`  Handler Type: ${folder}`);
 
     for (const file of actionFiles) {
         const path = `./handlers/${folder}/${file}`;
         const action = require(path) as Action<any>;
-        console.log(`Load: ${action.data.actionName}`);
+        console.log(`    Load: ${action.data.actionName}`);
 
         actions[folder][action.data.actionName] = action;
     }
 
-    console.log(`End load ${folder} handlers`);
+    console.log(`  End load ${folder} handlers`);
     console.log("")
 }
 console.log("End load handlers");
