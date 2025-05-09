@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, Interaction, CacheType, ButtonInteraction, MessageFlags, MessageFlagsBitField, ModalSubmitInteraction } from "discord.js";
+import { Client, GatewayIntentBits, Interaction, CacheType, ButtonInteraction, ModalSubmitInteraction, Message, PartialMessage, TextChannel } from "discord.js";
 import { Action } from "./interface/action";
 import { Command } from "./interface/command";
 import dotenv from "dotenv";
