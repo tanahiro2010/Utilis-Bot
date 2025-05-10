@@ -1,12 +1,14 @@
 import { Client, GatewayIntentBits, Interaction, CacheType, ButtonInteraction, ModalSubmitInteraction, Message, PartialMessage, TextChannel } from "discord.js";
-import { Action } from "./interface/action";
 import { Command } from "./interface/command";
+import { Action } from "./interface/action";
+import { Logger } from "./utils/logger";
 import dotenv from "dotenv";
 import fs from "fs";
 
 dotenv.config({ path: ".env.local" });
 
-const fileType: string = ".ts";
+const fileType: string = `.${process.argv[2] ?? "ts"}`;
+console.log("FileType: ", fileType);
 
 const client = new Client({
     intents: Object.values(GatewayIntentBits) as GatewayIntentBits[],
@@ -29,7 +31,7 @@ const commands: { [key: string]: Command } = {};
 const commandFiles = fs.readdirSync("./src/commands").filter((file) => file.endsWith(fileType));
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`) as Command;
-    console.log(`  Load: ${command.data.name}`);
+    console.warn(`  Load: ${command.data.name}`);
     commands[command.data.name] = command;
 }
 console.log("End load command");
