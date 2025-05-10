@@ -74,7 +74,9 @@ module.exports = {
                 flags: 0
             },
 
-            value: {}
+            value: {
+                mode: "first"
+            }
         }), ButtonStyle.Danger);
 
         const raw = new ActionRowBuilder<ButtonBuilder>()
