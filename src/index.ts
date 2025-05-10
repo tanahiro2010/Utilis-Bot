@@ -14,13 +14,8 @@ const client = new Client({
 
 // self interface
 interface Actions {
-    button: {
-        [key: string]: Action<ButtonInteraction>;
-    };
-
-    modal: { 
-        [key: string]: Action<ModalSubmitInteraction>; 
-    };
+    button: Record<string, Action<ButtonInteraction>>;
+    modal: Record<string, Action<ModalSubmitInteraction>>;
 
     [key: string]: {
         [key: string]: Action<any>

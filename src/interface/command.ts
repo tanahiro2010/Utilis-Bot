@@ -37,9 +37,7 @@ interface ButtonCommand {
     flags: number;
   };
 
-  value: {
-    [key: string]: any;
-  };
+  value: Record<string, any>;
 }
 
 export type { Command, ButtonCommand };
