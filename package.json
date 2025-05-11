@@ -6,7 +6,7 @@
   "scripts": {
     "test": "ts-node ./src/index.ts",
     "start": "node ./build/index.js",
-    "compile": "tsc -p ."
+    "build": "tsc -p ."
   },
   "keywords": [
     "discordjs",
