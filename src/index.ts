@@ -1,7 +1,6 @@
 import { Client, GatewayIntentBits, Interaction, CacheType, ButtonInteraction, ModalSubmitInteraction, Message, PartialMessage, TextChannel } from "discord.js";
-import { Command } from "./interface/command";
+import { ButtonCommand, Command, ModalCommand } from "./interface/command";
 import { Action } from "./interface/action";
-import { Logger } from "./utils/logger";
 import dotenv from "dotenv";
 import fs from "fs";
 
@@ -23,7 +22,6 @@ interface Actions {
         [key: string]: Action<any>
     }
 }
-
 
 // Registering commands
 console.log("Fetching command...");
@@ -47,7 +45,7 @@ for (const folder of folders) {
     for (const file of actionFiles) {
         const path = `./handlers/${folder}/${file}`;
         const action = require(path) as Action<any>;
-        console.log(`    Load: ${action.data.actionName}`);
+        console.warn(`    Load: ${action.data.actionName}`);
 
         actions[folder][action.data.actionName] = action;
     }
@@ -66,7 +64,7 @@ client.once("ready", async () => {
     const data = [];
 
     for (const commandName in commands) {
-        console.log(`Registering command: ${commandName}`);
+        console.warn(`  Registering command: ${commandName}`);
         data.push(commands[commandName].data);
     }
 
@@ -78,6 +76,9 @@ client.once("ready", async () => {
     return client.user?.setActivity("with Discord.js", { type: 0 });
 });
 
+client.on("messageCreate", async (message: Message) => {
+});
+
 client.on("interactionCreate", async (interaction: Interaction<CacheType>) => { // コマンドの実行
     if (!interaction.isCommand()) return;
     
@@ -85,6 +86,7 @@ client.on("interactionCreate", async (interaction: Interaction<CacheType>) => { 
     const { commandName } = interaction;
     const command: Command = commands[commandName];
     const flags = command.data.flags || 0;
+    console.log(`Flags: ${flags}`);
 
     await interaction.deferReply({ flags });
 
@@ -113,14 +115,45 @@ client.on("interactionCreate", async (interaction: Interaction<CacheType>) => { 
     if (!interaction.isButton()) return;
     
     const { customId } = interaction;
-    const command = JSON.parse(customId);
+    const command: ButtonCommand = JSON.parse(customId);
+    const { data } = command;
+    const actionName = data.action;
+    const flags: number = data.flags || 0;
+    console.log(`Flags: ${flags}`);
+    console.log(data.action);
+
+    if (data.defer !== false) {
+        await interaction.deferReply({ flags });
+    }
+    
+
+    const action: Action<ButtonInteraction> = actions.button[actionName];
+    if (!action) {
+        console.error(`Action ${actionName} not found`);
+        await interaction.followUp("This action does not exist!");
+        return;
+    }
+
+    console.log(`Executing action: ${actionName}`);
+    console.log("");
+    await action.execute(interaction);
+});
+
+client.on("interactionCreate", async (interaction: Interaction<CacheType>) => { // ダイアログの実行
+    if (!interaction.isModalSubmit()) return;
+
+    const { customId } = interaction;
+    const command: ModalCommand = JSON.parse(customId);
     const { data } = command;
     const actionName = data.action;
     const flags: number = data.flags || 0;
 
-    await interaction.deferReply({ flags });
+    if (data.defer !== false) {
+        await interaction.deferReply({ flags });
+    }
+    
 
-    const action: Action<ButtonInteraction> = actions.button[actionName];
+    const action: Action<ModalSubmitInteraction> = actions.modal[actionName];
     if (!action) {
         console.error(`Action ${actionName} not found`);
         await interaction.followUp("This action does not exist!");

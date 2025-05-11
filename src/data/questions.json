@@ -1,0 +1,42 @@
+[
+  {
+    "question": "10 * 9",
+    "answer": "90"
+  },
+  {
+    "question": "7 + 5",
+    "answer": "12"
+  },
+  {
+    "question": "15 - 3",
+    "answer": "12"
+  },
+  {
+    "question": "8 * 6",
+    "answer": "48"
+  },
+  {
+    "question": "81 / 9",
+    "answer": "9"
+  },
+  {
+    "question": "14 + 2",
+    "answer": "16"
+  },
+  {
+    "question": "20 - 11",
+    "answer": "9"
+  },
+  {
+    "question": "5 * 5",
+    "answer": "25"
+  },
+  {
+    "question": "18 / 2",
+    "answer": "9"
+  },
+  {
+    "question": "13 + 4",
+    "answer": "17"
+  }
+]

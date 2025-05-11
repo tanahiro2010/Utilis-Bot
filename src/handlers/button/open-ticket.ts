@@ -1,4 +1,4 @@
-import { ButtonInteraction, ButtonBuilder, ActionRowBuilder, TextChannel, EmbedBuilder, Colors, ButtonStyle } from "discord.js";
+import { ButtonInteraction, ButtonBuilder, ActionRowBuilder, TextChannel, EmbedBuilder, Colors, ButtonStyle, MessageFlags } from "discord.js";
 import { ButtonCommand } from "../../interface/command";
 import { createButton } from "../../models/button";
 import { Action } from "../../interface/action";
@@ -6,7 +6,7 @@ import { Action } from "../../interface/action";
 module.exports = {
     data: {
         actionName: "open-ticket",
-        flags: 0
+        flags: 0,
     },
 
     async execute(interaction: ButtonInteraction): Promise<void> {
@@ -57,7 +57,6 @@ module.exports = {
             const button = createButton("Close the ticket", JSON.stringify({
                 data: {
                     action: "close-ticket",
-                    flags: 0
                 },
                 value: {
                     userId: userId

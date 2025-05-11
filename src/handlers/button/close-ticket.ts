@@ -1,4 +1,4 @@
-import { ButtonInteraction, ButtonBuilder, ActionRowBuilder, TextChannel, EmbedBuilder, Colors, ButtonStyle } from "discord.js";
+import { ButtonInteraction, ButtonBuilder, ActionRowBuilder, TextChannel, EmbedBuilder, Colors, ButtonStyle, MessageFlags } from "discord.js";
 import { ButtonCommand } from "../../interface/command";
 import { createButton } from "../../models/button";
 import { Action } from "../../interface/action";
@@ -29,6 +29,8 @@ module.exports = {
         console.log(command);
         const { userId } = command.value;
 
+        const response = await interaction.followUp({ content: "Please wait" });
+
         try {
             await channel.edit({
                 permissionOverwrites: [
@@ -50,8 +52,6 @@ module.exports = {
             return;
         }
 
-        await interaction.followUp({});
-
         const embed = new EmbedBuilder()
             .setColor(Colors.Aqua)
             .setTitle("Close the ticket")
@@ -60,30 +60,29 @@ module.exports = {
         const openButton = createButton("Open again", JSON.stringify({
             data: {
                 action: "open-ticket",
-                flags: 0
+                flags: MessageFlags.Ephemeral
             },
 
             value: {
-                userId: userId,
+                userId: userId
             }
         }));
 
         const deleteButton = createButton("Delete ticket", JSON.stringify({
             data: {
                 action: "delete-ticket",
-                flags: 0
+                flags: 0,
+                defer: false
             },
 
-            value: {
-                mode: "first"
-            }
-        }), ButtonStyle.Danger);
+            value: {}
+        } as ButtonCommand), ButtonStyle.Danger);
 
         const raw = new ActionRowBuilder<ButtonBuilder>()
             .addComponents(openButton)
             .addComponents(deleteButton);
 
-        await channel.send({ embeds: [embed], components: [raw] });
+        await response.edit({ embeds: [embed], components: [raw] });
 
         return;
     }

@@ -1,6 +1,9 @@
-import { ButtonInteraction, TextChannel, EmbedBuilder, Colors, ButtonBuilder, ActionRowBuilder, MessageFlags } from "discord.js";
-import { ButtonCommand } from "../../interface/command";
+import { ActionRowBuilder, ButtonInteraction, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
+import { ModalCommand } from "../../interface/command";
 import { createButton } from "../../models/button";
+import { readFileSync } from "fs";
+import { randomInt } from "crypto";
+import { Question } from "../../interface/question";
 import { Action } from "../../interface/action";
 
 module.exports = {
@@ -10,26 +13,41 @@ module.exports = {
 
     async execute(interaction: ButtonInteraction): Promise<void> {
         const { customId, channel } = interaction;
-        const command: ButtonCommand = JSON.parse(customId);
+        const questions: Array<Question> = JSON.parse(readFileSync("src/data/questions.json", { encoding: "utf-8" }));
+        const question = questions[randomInt(questions.length - 1)];
+        console.log(question);
 
-        if (command.value.mode == "first") {         // 確認ボタンを押していない -> 確認ボタンを送信
-            const embed = new EmbedBuilder()
-                .setColor(Colors.Red)
-                .setTitle("Confirm")
-                .setDescription("Do you want to delete this ticket?");
-
-            const button = createButton("Delete", JSON.stringify({
+        const modal = new ModalBuilder()
+            .setTitle("Confirm")
+            .setCustomId(JSON.stringify({
                 data: {
                     action: "delete-ticket",
-                    flags: MessageFlags.Ephemeral
+                    flags: 0
                 },
 
                 value: {
-                    mode: "second"
+                    channel: channel?.id
                 }
-            } as ButtonCommand), );
-        } else if (command.value.mode == "second") { // 確認ボタンを押下済み -> チャンネルを削除
-            await channel?.delete();
-        }
+            } as ModalCommand));
+
+        const textInput = new TextInputBuilder()
+            .setStyle(TextInputStyle.Short)
+            .setLabel(`問題: ${question.question}`)
+            .setCustomId(JSON.stringify({
+                data: {
+                    action: "auth-question"
+                },
+
+                value: {
+                    answer: question.answer
+                }
+            } as ModalCommand));
+
+        const raw = new ActionRowBuilder<TextInputBuilder>().addComponents(textInput);
+        modal.addComponents(raw);
+
+        await interaction.showModal(modal);
+
+        return;
     }
 } as Action<ButtonInteraction>;

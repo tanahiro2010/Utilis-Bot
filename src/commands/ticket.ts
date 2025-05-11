@@ -7,7 +7,8 @@ import {
     ButtonBuilder, 
     Colors, 
     ChannelType,
-    Role
+    Role,
+    MessageFlags
 } from "discord.js";
 import { createButton } from "../models/button";
 import { Command } from "../interface/command";
@@ -113,7 +114,7 @@ module.exports = {
             JSON.stringify({
                 data: {
                     action: "create-ticket",
-                    flags: 0
+                    flags: MessageFlags.Ephemeral
                 },
                 value: {
                     categoryId: category?.id

@@ -35,9 +35,20 @@ interface ButtonCommand {
   data: {
     action: string;
     flags: number;
+    defer?: boolean;
   };
 
   value: Record<string, any>;
 }
 
-export type { Command, ButtonCommand };
+interface ModalCommand {
+  data: {
+    action: string;
+    flags?: number;
+    defer?: boolean;
+  };
+
+  value: Record<string, any>;
+}
+
+export type { Command, ButtonCommand, ModalCommand };

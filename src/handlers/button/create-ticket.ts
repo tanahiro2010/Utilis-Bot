@@ -48,7 +48,7 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setColor(Colors.Blue)
                 .setTitle("Ticket")
-                .setDescription(`Ticket created successfully!\nWhen close the ticket, please click the button below.`);
+                .setDescription(`Ticket created successfully!\nWhen close the ticket, please click the button below.\n@everyone`);
 
             const button = createButton("Close the ticket", JSON.stringify({ 
                 data: { 
@@ -62,7 +62,7 @@ module.exports = {
             
             const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
 
-            await channel.send({ embeds: [embed], components: [row] });
+            await channel.send({ content: "@everyone", embeds: [embed], components: [row], allowedMentions: { parse: ["everyone"] } });
         } catch (error) {
             const errorMessage = error as Error;
             console.error(error);
