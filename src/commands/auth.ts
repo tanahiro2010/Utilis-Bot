@@ -57,7 +57,7 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setColor(Colors.Red)
                 .setTitle("Error")
-                .setDescription("You don't have permission");
+                .setDescription("You don't have administrator permission");
 
             await interaction.followUp({ embeds: [embed] });
             return;

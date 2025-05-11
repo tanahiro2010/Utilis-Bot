@@ -8,10 +8,14 @@ import {
     Colors, 
     ChannelType,
     Role,
-    MessageFlags
+    MessageFlags,
+    GuildMember,
+    PermissionFlagsBits
 } from "discord.js";
+import { getMaxPermissions } from "../utils/auth";
 import { createButton } from "../models/button";
 import { Command } from "../interface/command";
+
 
 module.exports = {
     data: {
@@ -67,6 +71,25 @@ module.exports = {
     },
 
     async execute(interaction: CommandInteraction): Promise<void> {
+        const { member } = interaction;
+
+        if (!member) {
+            return;
+        }
+
+        const permission = getMaxPermissions(member as GuildMember);
+
+        if (!permission.has(PermissionFlagsBits.ManageChannels)) {
+            const embed = new EmbedBuilder()
+                .setColor(Colors.Red)
+                .setTitle("Error")
+                .setDescription("You don't have manage channels permission");
+
+            await interaction.followUp({ embeds: [embed] });
+            return;
+        }
+
+
         const title = interaction.options.get("title")?.value as string || "Ticket Board";
         const description = interaction.options.get("description")?.value as string || "Click the button below to create a ticket.";
         const role = interaction.options.get("role")?.role as Role;
