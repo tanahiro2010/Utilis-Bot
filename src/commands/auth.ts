@@ -1,4 +1,5 @@
-import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder, ButtonStyle, Role, ActionRowBuilder, ButtonBuilder, Colors, MessageFlags } from "discord.js";
+import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder, ButtonStyle, Role, ActionRowBuilder, ButtonBuilder, Colors, MessageFlags, GuildMember, PermissionFlagsBits } from "discord.js";
+import { getMaxPermissions } from "../utils/auth";
 import { createButton } from "../models/button";
 import { Command } from "../interface/command";
 
@@ -49,6 +50,19 @@ module.exports = {
     },
 
     async execute(interaction: CommandInteraction): Promise<void> {
+        const member: GuildMember = interaction.member as GuildMember;
+        const permission = getMaxPermissions(member);
+
+        if (!permission.has(PermissionFlagsBits.Administrator)) {
+            const embed = new EmbedBuilder()
+                .setColor(Colors.Red)
+                .setTitle("Error")
+                .setDescription("You don't have permission");
+
+            await interaction.followUp({ embeds: [embed] });
+            return;
+        }
+
         const title = interaction.options.get("title")?.value as string || "Auth Board";
         const description = interaction.options.get("description")?.value as string || "Click the button below to authenticate you.";
         const role: Role = interaction.options.get("role")?.role as Role;

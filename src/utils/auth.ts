@@ -5,7 +5,7 @@ import { GuildMember, PermissionsBitField, Role } from "discord.js";
  * @param user GuildMember
  * @returns PermissionsBitField（合成された全パーミッション）
  */
-async function getMaxPermissions(member: GuildMember): Promise<PermissionsBitField> {
+function getMaxPermissions(member: GuildMember): PermissionsBitField {
     let combined = new PermissionsBitField();
 
     member.roles.cache.forEach((role: Role) => {
