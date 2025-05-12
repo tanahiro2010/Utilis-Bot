@@ -12,7 +12,7 @@ class WriteCream {
     constructor() {}
 
     async askGemini(message: string): Promise<null | string> {
-        if (this.messages.length >= 20) {
+        if (this.messages.length >= 21) {
             this.messages = [];
         }
 
