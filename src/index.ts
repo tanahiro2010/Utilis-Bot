@@ -1,5 +1,6 @@
-import { Client, GatewayIntentBits, Interaction, CacheType, ButtonInteraction, ModalSubmitInteraction, Message, PartialMessage, TextChannel } from "discord.js";
+import { Client, GatewayIntentBits, Interaction, CacheType, ButtonInteraction, ModalSubmitInteraction, Message, PartialMessage, TextChannel, EmbedBuilder, Colors } from "discord.js";
 import { ButtonCommand, Command, ModalCommand } from "./interface/command";
+import { WriteCream } from "./libs/writecream";
 import { Action } from "./interface/action";
 import dotenv from "dotenv";
 import fs from "fs";
@@ -56,6 +57,8 @@ for (const folder of folders) {
 console.log("End load handlers");
 console.log("");
 
+const writecream: WriteCream = new WriteCream();
+
 
 client.once("ready", async () => {
     console.log(`Logged in as ${client.user?.tag}`);
@@ -77,6 +80,25 @@ client.once("ready", async () => {
 });
 
 client.on("messageCreate", async (message: Message) => {
+    const { content, channel } = message;
+
+    if (!channel.isTextBased()) return;
+    if (!content.includes("<@1368873633904070735>")) return;
+    console.log("Message: ", content);
+
+    const result: null | string = await writecream.askGemini(content.replace("<@1368873633904070735>", ""));
+    if (!result) {
+        const embed = new EmbedBuilder()
+            .setColor(Colors.Red)
+            .setTitle("Error")
+            .setDescription("Response error");
+
+        await message.reply({ embeds: [embed] });
+        return
+    }
+
+    await message.reply(result);
+    return;
 });
 
 client.on("interactionCreate", async (interaction: Interaction<CacheType>) => { // コマンドの実行
