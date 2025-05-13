@@ -1,6 +1,5 @@
-import { Colors, EmbedBuilder, ModalSubmitInteraction, TextChannel } from "discord.js";
+import { Colors, EmbedBuilder, ModalSubmitInteraction } from "discord.js";
 import { ModalCommand } from "../../interface/command";
-import { Question } from "../../interface/question";
 import { Action } from "../../interface/action";
 
 module.exports = {

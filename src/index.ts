@@ -110,7 +110,10 @@ client.on("interactionCreate", async (interaction: Interaction<CacheType>) => { 
     const flags = command.data.flags || 0;
     console.log(`Flags: ${flags}`);
 
-    await interaction.deferReply({ flags });
+    if (command.data.defer != false) {
+        await interaction.deferReply({ flags });
+    }
+    
 
     if (!command) {
         console.error(`Command ${commandName} not found`);

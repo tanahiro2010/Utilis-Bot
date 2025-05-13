@@ -5,6 +5,7 @@ interface Command {
     name: string;
     description: string;
     flags: number;
+    defer: boolean;
     options?: Array<{
       name: string;
       description: string;
